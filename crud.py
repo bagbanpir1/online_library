@@ -77,3 +77,17 @@ def get_books_by_type(db: Session, type_id: int):
 
 def get_books_by_author(db: Session, author_id: int):
     return db.query(models.Book).filter(models.Book.author_id==author_id).all()
+
+def books_filter(db: Session, category_id=0, author_id=0, type_id=0):
+    books_query = db.query(models.Book)
+    
+    if category_id != 0:
+        books_query = books_query.filter(models.Book.category_id == category_id)
+    if author_id != 0:
+        books_query = books_query.filter(models.Book.author_id == author_id)
+    if type_id != 0:
+        books_query = books_query.filter(models.Book.type_id == type_id)
+    
+    filtered_books = books_query.all()
+    return filtered_books
+

@@ -4,6 +4,7 @@ import crud
 import models
 import schemas
 from database import SessionLocal, engine
+from typing import Optional
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -101,3 +102,11 @@ def get_books_by_author(author_id:int, db:Session=Depends(get_db)):
 def get_books_by_type(type_id:int, db:Session=Depends(get_db)):
     db_books_by_type = crud.get_books_by_type(type_id=type_id, db=db)
     return db_books_by_type
+
+@app.get("/book/filter/category/{category_id}/author/{author_id}/type/{type_id}")
+def book_filter(category_id:Optional[int]=0,
+                author_id:Optional[int]=0,
+                type_id:Optional[int]=0,
+                db:Session=Depends(get_db)):
+    filtered_books = crud.books_filter(category_id=category_id, type_id=type_id, author_id=author_id, db=db)
+    return filtered_books
